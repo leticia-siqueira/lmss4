@@ -90,3 +90,50 @@ processflow> ^C
 [?2004lexit
 
 Script done on 2026-08-22 11:08:47-03:00 [COMMAND_EXIT_CODE="130"]
+Script started on 2026-08-22 11:09:45-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="18"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit./processflowmake[K clean[Kdategit push[4Pdate
+[?2004lSat Aug 22 11:09:49 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make clean
+[?2004lrm -f *.o *.txt processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./processflow
+[?2004lProcesso interativo
+processflow> task listar /bin/ls -l
+processflow> run listar
+Makefile  README.md  evidencias.log  main.c  main.o  processflow
+Processo filho terminado!processflow> ru  task ordenar /seila/blabçl      testarerro -l -s a
+processflow> run ordenar
+processflow> run tarefanaoexiste
+processflow> ru  ^C
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-22 11:18:49-03:00 [COMMAND_EXIT_CODE="130"]
+Script started on 2026-08-22 11:35:26-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="18"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit./processflowmake[K clean[6Pdateexitdate
+[?2004lSat Aug 22 11:35:30 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ dateexit./processflowmake[K clen[Kan
+[?2004lrm -f *.o *.txt processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ na[K[Kmake
+[?2004lgcc -c main.c
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./processflow
+[?2004lProcesso interativo
+processflow> task t1 /bin/echo primeiro
+processflow> run t1
+
+Processo filho terminado!processflow> ^[[A^[[A        task t1 / /bin/echo primeiro
+Erro! Já existe a tarefa 't1'.
+processflow> task t2 task t2 /bin/echo segundo
+processflow> run t1 t2
+
+Processo filho terminado!processflow> kkj
+Erro! Comando 'kkj' desconhecido
+processflow> ^C
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ^C[?2004l[?2004h[?2004l
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-22 11:37:41-03:00 [COMMAND_EXIT_CODE="130"]

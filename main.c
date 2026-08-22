@@ -45,29 +45,46 @@ void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[
 
 }
 
-void run_task(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int quantidade_tarefas){
+    if(numero_argumentos < 2){
+        printf("Erro! Uso: run <nome>\n");
+        return;
+    }
 
     int indice = -1;
     for(int i = 0; i < quantidade_tarefas; i++){
         if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
             indice = i;
+            break;
         }
     }
 
-    pid_t pid;
-
-    pid = fork();
-
-    if (pid < 0) { 
-        fprintf(stderr, "Erro!");
+    if(indice == -1){
+        printf("Erro! Tarefa '%s' não existe.\n", argumentos[1]);
         return;
     }
-    else if (pid == 0) {
-        execlp(cadastros[indice].programa, cadastros[indice].nome, NULL);
+
+    char *argv_exec[22]; 
+    argv_exec[0] = cadastros[indice].programa;
+    int i;
+    for(i = 0; i < cadastros[indice].quantidade_arg; i++){
+        argv_exec[i + 1] = cadastros[indice].argumento[i];
     }
-    else { 
-        wait(NULL);
-        printf("Processo filho terminado!");
+    argv_exec[i + 1] = NULL; 
+
+    pid_t pid = fork();
+
+    if(pid < 0){
+        printf("Erro! Falha ao criar processo.\n");
+        return;
+    } else if(pid == 0){
+        execvp(cadastros[indice].programa, argv_exec);
+
+        printf("Erro! '%s' nao pode ser executado.\n", cadastros[indice].programa);
+        exit(1); 
+    } else {
+        int status;
+        waitpid(pid, &status, 0);
     }
 }
 
