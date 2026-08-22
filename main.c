@@ -5,26 +5,58 @@
 
 #define MAX_argumentos 20
 
-typedef struct Tarefa{
-    char nome[50];
-    char programa[50];
-    char argumento[20][50];
+typedef struct Task{
+    char nome[100];
+    char programa[100];
+    char argumento[100][100];
     int quantidade_arg;
-}Tarefa;
 
-void cadastro(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int *quantidade_tarefas){
 
+}Task;
+
+void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[], int *quantidade_tarefas){
+    
+    if (numero_argumentos < 3){
+        printf("Erro! Task sem programa.\n");
+        return;
+    }
+
+    for(int i = 0; i < *quantidade_tarefas; i++){
+    if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
+        printf("Erro! Já existe a tarefa '%s'.\n", argumentos[1]);
+        return;
+        }
+    }
+
+    strncpy(cadastros[*quantidade_tarefas].nome, argumentos[1], 99);
+    cadastros[*quantidade_tarefas].nome[99] = '\0';
+
+    strncpy(cadastros[*quantidade_tarefas].programa, argumentos[2], 99);
+    cadastros[*quantidade_tarefas].programa[99] = '\0';
+
+    for (int i = 3; i < numero_argumentos; i++){
+        strncpy(cadastros[*quantidade_tarefas].argumento[i - 3], argumentos[i], 99);
+        cadastros[*quantidade_tarefas].argumento[i - 3][99] = '\0';
+    }
+    cadastros[*quantidade_tarefas].quantidade_arg = numero_argumentos - 3;
+
+    (*quantidade_tarefas)++;
+
+}
+
+run(argumentos, numero_argumentos, cadastros, quantidade_tarefas){
+    
 }
 
 int main(int argc, char *argv[]){
 
     int quantidade_tarefas = 0;
-    Tarefa cadastros[50];
+    Task cadastros[100];
 
     if(argc == 1){
         printf("Processo interativo\n");
 
-        char comando_digitado[99];
+        char comando_digitado[1000];
 
         while(1){
             printf("processflow> ");
@@ -48,29 +80,21 @@ int main(int argc, char *argv[]){
                 continue;
             }
 
-            for(int i = 0; i < numero_argumentos; i++){
-                printf("[%s] ", argumentos[i]);
-            }
-            printf("\n");
-
             if ((strcmp(argumentos[0], "exit")) == 0){
                 break;
             }
 
-            if(strcmp(argumentos[0], "exit") == 0){
-                break;
-
-            } else if(strcmp(argumentos[0], "task") == 0){
-                cadastrar_task(comandos, num_comandos, cadastros, &quantidade_tarefas);
+            if(strcmp(argumentos[0], "task") == 0){
+                cadastro_de_task(argumentos, numero_argumentos, cadastros, &quantidade_tarefas);
 
             } else if(strcmp(argumentos[0], "run") == 0){
-                
+                run(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
             } else if(strcmp(argumentos[0], "workdir") == 0){
             
 
             } else {
-                printf("Erro: comando desconhecido '%s'\n", argumentos[0]);
+                printf("Erro! Comando '%s' desconhecido\n", argumentos[0]);
 }
         }
 

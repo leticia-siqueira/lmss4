@@ -18,3 +18,44 @@ processflow> ^C
 [?2004lexit
 
 Script done on 2026-08-19 20:58:18-03:00 [COMMAND_EXIT_CODE="130"]
+Script started on 2026-08-21 19:30:05-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="5"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ git pushcommit -m "Conquista da noite: Inicializando o processo de entrada e cadastro das tarefas"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd .[K[6Ppwdwhoami[2Pdate
+[?2004lFri Aug 21 19:30:10 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ dategit pushcommit -m "Conquista da noite: Inicializando o processo de entrada e cadastro das tarefas"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd .[K[6Ppwdwhoami
+[?2004lletciasiqueira
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ whoami[2Pdategit pushcommit -m "Conquista da noite: Inicializando o processo de entrada e cadastro das tarefas"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd .[K[6Ppwd
+[?2004l/home/letciasiqueira/lmss4
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./precessflow
+[?2004lbash: ./precessflow: No such file or directory
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./processflow
+[?2004lProcesso interativo
+processflow> task listar /bin/ls -l
+processflow> ^C
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-21 19:31:17-03:00 [COMMAND_EXIT_CODE="130"]
+Script started on 2026-08-21 19:32:12-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="5"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit./processflowecessflowmake[K[1Ppwdwhoami[2Pdate
+[?2004lFri Aug 21 19:32:16 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ dateexit./processflowecessflowmake[K[1Ppwdwhoami
+[?2004lletciasiqueira
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./processflow
+[?2004lProcesso interativo
+processflow> tas  k listas r /bin/ls -l
+Tarefa 'listar' cadastrada: programa=/bin/ls, args=1
+processflow> task ordenar /usr/bin/sort
+Tarefa 'ordenar' cadastrada: programa=/usr/bin/sort, args=0
+processflow> task semprograma           blablabla
+Erro! Task sem programa.
+processflow> ^C
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-21 19:33:33-03:00 [COMMAND_EXIT_CODE="130"]
