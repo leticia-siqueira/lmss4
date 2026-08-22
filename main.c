@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #define MAX_argumentos 20
 
@@ -44,7 +45,7 @@ void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[
 
 }
 
-void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int quantidade_tarefas){
+void run_task(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
 
     int indice = -1;
     for(int i = 0; i < quantidade_tarefas; i++){
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]){
                 cadastro_de_task(argumentos, numero_argumentos, cadastros, &quantidade_tarefas);
 
             } else if(strcmp(argumentos[0], "run") == 0){
-                run(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+                run_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
             } else if(strcmp(argumentos[0], "workdir") == 0){
             

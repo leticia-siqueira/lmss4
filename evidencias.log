@@ -59,3 +59,34 @@ processflow> ^C
 [?2004lexit
 
 Script done on 2026-08-21 19:33:33-03:00 [COMMAND_EXIT_CODE="130"]
+Script started on 2026-08-22 11:04:42-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="18"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ git pushcommit -m "Funcao de cadastrar terminada, iniciando run.."[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd .[Kscript -a evidencias.log[14Pmake cleanscript -a evidencias.logexit[K./processflowmake[Kwhoami[2Pdateexitdate
+[?2004lSat Aug 22 11:04:49 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+[01m[Kmain.c:[m[K In function ‘[01m[Krun_task[m[K’:
+[01m[Kmain.c:58:11:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kfork[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+   58 |     pid = [01;35m[Kfork[m[K();
+      |           [01;35m[K^~~~[m[K
+[01m[Kmain.c:65:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kexeclp[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+   65 |         [01;35m[Kexeclp[m[K(cadastros[indice].programa, cadastros[indice].nome, NULL);
+      |         [01;35m[K^~~~~~[m[K
+[01m[Kmain.c:65:9:[m[K [01;35m[Kwarning: [m[Kincompatible implicit declaration of built-in function ‘[01m[Kexeclp[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wbuiltin-declaration-mismatch-Wbuiltin-declaration-mismatch]8;;[m[K]
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make clen[Kan
+[?2004lrm -f *.o *.txt processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+gcc main.o -o processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ./processflow
+[?2004lProcesso interativo
+processflow> task listar /bin/ls -l
+processflow> run listar
+Erro! Comando 'run' desconhecido
+processflow> 	oxe l kkkk
+Erro! Comando 'oxe' desconhecido
+processflow> ^C
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-22 11:08:47-03:00 [COMMAND_EXIT_CODE="130"]
