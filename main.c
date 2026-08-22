@@ -44,8 +44,30 @@ void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[
 
 }
 
-run(argumentos, numero_argumentos, cadastros, quantidade_tarefas){
-    
+void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int quantidade_tarefas){
+
+    int indice = -1;
+    for(int i = 0; i < quantidade_tarefas; i++){
+        if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
+            indice = i;
+        }
+    }
+
+    pid_t pid;
+
+    pid = fork();
+
+    if (pid < 0) { 
+        fprintf(stderr, "Erro!");
+        return;
+    }
+    else if (pid == 0) {
+        execlp(cadastros[indice].programa, cadastros[indice].nome, NULL);
+    }
+    else { 
+        wait(NULL);
+        printf("Processo filho terminado!");
+    }
 }
 
 int main(int argc, char *argv[]){
