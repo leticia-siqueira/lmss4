@@ -112,7 +112,22 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
         cadastro_de_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
     } else if(strcmp(argumentos[0], "run") == 0){
-        run_task(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+        if( numero_argumentos < 2){
+            printf("Erro: Numero de argumentos invalidos\n");
+        
+            } else if (strcmp(argumentos[1], "sequential") == 0){
+                sequential(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+
+            } else if (strcmp(argumentos[1], "parallel") == 0){
+                run_parallel();
+
+            } else if(strcmp(argumentos[1], "pipe") == 0){
+                run_pipe();
+
+            } else{
+                run_task(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+
+            }
 
     } else if(strcmp(argumentos[0], "workdir") == 0){
         
@@ -124,13 +139,29 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
     return 0; 
 }
 
+void sequential(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+    
+    if (numero_argumentos < 3){
+        printf("Erro: Voce nao digitou nenhuma tarefa.\n");
+        return;
+    }
+
+    for (int i = 2; i < numero_argumentos; i++){
+        char *lista_comandos_sequential[2];
+        lista_comandos_sequential[0] = "run";
+        lista_comandos_sequential[1] = argumentos[i];
+
+        run_task(lista_comandos_sequential, 2, cadastros, quantidade_tarefas);
+    }
+}
+
 int main(int argc, char *argv[]){
 
     int quantidade_tarefas = 0;
     Task cadastros[100];
 
     if(argc == 1){
-        printf("Processo interativo\n");
+        printf("Processo interativo\n"); 
 
         char comando_digitado[1000];
 
@@ -170,14 +201,29 @@ int main(int argc, char *argv[]){
                 cadastro_de_task(argumentos, numero_argumentos, cadastros, &quantidade_tarefas);
 
             } else if(strcmp(argumentos[0], "run") == 0){
-                run_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+                if( numero_argumentos < 2){
+                    printf("Erro: Numero de argumentos invalidos\n");
+        
+                } else if (strcmp(argumentos[1], "sequential") == 0){
+                    sequential(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+                } else if (strcmp(argumentos[1], "parallel") == 0){
+                    parallel();
+
+                } else if(strcmp(argumentos[1], "pipe") == 0){
+                    pipe();
+
+                } else{
+                    run_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+                }
 
             } else if(strcmp(argumentos[0], "workdir") == 0){
             
 
             } else {
                 printf("Erro: processo desconhecido\n");
-}
+            }   
         }
 
     }else if (argc == 2){
