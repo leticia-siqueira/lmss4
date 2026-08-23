@@ -112,7 +112,7 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
         cadastro_de_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
     } else if(strcmp(argumentos[0], "run") == 0){
-        run_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+        run_task(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
     } else if(strcmp(argumentos[0], "workdir") == 0){
         
@@ -138,6 +138,11 @@ int main(int argc, char *argv[]){
             printf("processflow> ");
 
             fgets(comando_digitado, sizeof(comando_digitado), stdin);
+
+            if(fgets(comando_digitado, sizeof(comando_digitado), stdin) == NULL){
+                break;
+            }
+
             char *final_da_linha = strchr(comando_digitado, '\n');
             if(final_da_linha != NULL){
                 *final_da_linha = '\0';
