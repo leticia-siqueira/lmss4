@@ -18,13 +18,13 @@ typedef struct Task{
 void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[], int *quantidade_tarefas){
     
     if (numero_argumentos < 3){
-        printf("Erro! Task sem programa.\n");
+        printf("Erro: Task sem programa.\n");
         return;
     }
 
     for(int i = 0; i < *quantidade_tarefas; i++){
     if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
-        printf("Erro! Já existe a tarefa '%s'.\n", argumentos[1]);
+        printf("Erro: essa tarefa ja existe\n");
         return;
         }
     }
@@ -45,9 +45,9 @@ void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[
 
 }
 
-void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int quantidade_tarefas){
+void run_task(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
     if(numero_argumentos < 2){
-        printf("Erro! Uso: run <nome>\n");
+        printf("Erro: argumentos insuficientes\n");
         return;
     }
 
@@ -60,7 +60,7 @@ void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int
     }
 
     if(indice == -1){
-        printf("Erro! Tarefa '%s' não existe.\n", argumentos[1]);
+        printf("Erro: Tarefa nao existe.\n");
         return;
     }
 
@@ -75,17 +75,53 @@ void run_task(char *argumentos[], int numero_argumentos, Tarefa cadastros[], int
     pid_t pid = fork();
 
     if(pid < 0){
-        printf("Erro! Falha ao criar processo.\n");
+        printf("Erro: Falha na criacao do processo.\n");
         return;
     } else if(pid == 0){
         execvp(cadastros[indice].programa, argv_exec);
 
-        printf("Erro! '%s' nao pode ser executado.\n", cadastros[indice].programa);
+        printf("Erro: nao pode ser executado.\n");
         exit(1); 
     } else {
         int status;
         waitpid(pid, &status, 0);
     }
+}
+
+int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
+
+    char *argumentos[MAX_argumentos];
+    int numero_argumentos = 0;
+
+    char *argumento = strtok(linha, " ");
+    while(argumento != NULL && numero_argumentos < MAX_argumentos){
+        argumentos[numero_argumentos] = argumento;
+        numero_argumentos++;
+        argumento = strtok(NULL, " ");
+    }
+
+    if(numero_argumentos == 0){
+        return 0; 
+    }
+
+    if(strcmp(argumentos[0], "exit") == 0){
+        return 1; 
+    }
+
+    if(strcmp(argumentos[0], "task") == 0){
+        cadastro_de_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+    } else if(strcmp(argumentos[0], "run") == 0){
+        run_task(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+    } else if(strcmp(argumentos[0], "workdir") == 0){
+        
+
+    } else {
+        printf("Erro: comando desconhecido\n");
+    }
+
+    return 0; 
 }
 
 int main(int argc, char *argv[]){
@@ -100,10 +136,11 @@ int main(int argc, char *argv[]){
 
         while(1){
             printf("processflow> ");
+
             fgets(comando_digitado, sizeof(comando_digitado), stdin);
-            char *encerrar = strchr(comando_digitado, '\n');
-            if(encerrar != NULL){
-                *encerrar = '\0';
+            char *final_da_linha = strchr(comando_digitado, '\n');
+            if(final_da_linha != NULL){
+                *final_da_linha = '\0';
             }
 
             char *argumentos[MAX_argumentos];
@@ -134,15 +171,38 @@ int main(int argc, char *argv[]){
             
 
             } else {
-                printf("Erro! Comando '%s' desconhecido\n", argumentos[0]);
+                printf("Erro: processo desconhecido\n");
 }
         }
 
     }else if (argc == 2){
         printf("Processo workflow\n");
-    }else{
-        return -1;
-    }
+        
+        FILE *arquivo = fopen(argv[1], "r");
+        if(arquivo == NULL){
+            printf("Erro! Nao foi possível abrir o arquivo\n");
+            return -1;
+        }
 
+        char linha[1000];
+        while(fgets(linha, sizeof(linha), arquivo) != NULL){
+            char *final_da_linha = strchr(linha, '\n');
+            if(final_da_linha != NULL){
+                *final_da_linha = '\0';
+            }
+
+            printf("%s\n", linha); 
+
+            int acabou_linha = ler_linha(linha, cadastros, &quantidade_tarefas);
+
+            if(acabou_linha == 1){
+                break;
+            }
+        }
+
+        fclose(arquivo);
+        } else {
+            return -1;
+        }
     return 0;
 }
