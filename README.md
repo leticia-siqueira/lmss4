@@ -1,10 +1,7 @@
 # Ordenador de Processos 
 
 O ProcessFlow, é um orquestrador de processos feito em C. 
-A ideia é simular um terminal, como por exemplo o powershell:
-você cadastra "tarefas" (programas do sistema, tipo `ls`, `sort`, `cat`...) e manda
-o ProcessFlow executar elas — sozinhas, em sequência, em paralelo ou até em pipe,
-igualzinho um shell de verdade faria por baixo dos panos.
+A ideia é simular um terminal, como por exemplo o powershell.
 
 Rubricas utilizadas:
 - README + Makefile 
