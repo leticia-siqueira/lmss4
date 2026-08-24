@@ -12,7 +12,9 @@ typedef struct Task{
     char argumento[100][100];
     int quantidade_arg;
 
-
+    char arquivo_input[100];
+    char arquivo_output[100];
+    int modo_output;
 }Task;
 
 void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[], int *quantidade_tarefas){
@@ -39,7 +41,12 @@ void cadastro_de_task(char *argumentos[], int numero_argumentos, Task cadastros[
         strncpy(cadastros[*quantidade_tarefas].argumento[i - 3], argumentos[i], 99);
         cadastros[*quantidade_tarefas].argumento[i - 3][99] = '\0';
     }
+    
     cadastros[*quantidade_tarefas].quantidade_arg = numero_argumentos - 3;
+
+    cadastros[*quantidade_tarefas].arquivo_input[0] = '\0';
+    cadastros[*quantidade_tarefas].arquivo_output[0] = '\0';
+    cadastros[*quantidade_tarefas].modo_output = 0;
 
     (*quantidade_tarefas)++;
 
@@ -108,19 +115,33 @@ void parallel(char *argumentos[], int numero_argumentos, Task cadastros[], int q
     pid_t pid_processos[50];
     int total_processos_paralelos = 0;
 
-    for( int i = 2; i < numero_argumentos; i++){
+    for(int i = 2; i < numero_argumentos; i++){
+
+        int indice = -1;
+        for(int k = 0; k < quantidade_tarefas; k++){
+            if(strcmp(cadastros[k].nome, argumentos[i]) == 0){
+                indice = k;
+                break;
+            }
+        }
+
+        if(indice == -1){
+            printf("Erro: essa tarefa nao existe.\n");
+            continue;
+        }
+
         char *argv_exec[22]; 
         argv_exec[0] = cadastros[indice].programa;
         int j;
         for(j = 0; j < cadastros[indice].quantidade_arg; j++){
             argv_exec[j + 1] = cadastros[indice].argumento[j];
         }
-        argv_exec[j + 1] = NULL; 
+        argv_exec[j + 1] = NULL;
 
         pid_t pid = fork();
 
         if(pid < 0){
-            printf("Erro: Falha na criacao do processo.\n");
+            printf("Erro: Falha ao criar o processo.\n");
             return;
         } else if(pid == 0){
             execvp(cadastros[indice].programa, argv_exec);
@@ -128,15 +149,75 @@ void parallel(char *argumentos[], int numero_argumentos, Task cadastros[], int q
             printf("Erro: nao pode ser executado.\n");
             exit(1); 
         } else{
-           pid_processos[total_processos_paralelos] = pid;
-           total_processos_paralelos++; 
+            pid_processos[total_processos_paralelos] = pid;
+            total_processos_paralelos++; 
         }
-
     }
 
-    for(int i = 0, i < total_processos_paralelos; i++){
+    for(int i = 0; i < total_processos_paralelos; i++){
         int status;
         waitpid(pid_processos[i], &status, 0);
+    }
+}
+
+void funcao_input(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+
+    if(numero_argumentos < 3){
+        printf("Erro: numero de argumentos insuficiente\n");
+        return;
+    }
+
+    int indice = -1;
+    for(int i = 0; i < quantidade_tarefas; i++){
+        if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
+            indice = i;
+            break;
+        }
+    }
+
+    if(indice == -1){
+        printf("Erro: essa tarefa nao existe.\n");
+        return;
+    }
+
+    strncpy(cadastros[indice].arquivo_input, argumentos[2], 99);
+    cadastros[indice].arquivo_input[99] = '\0';
+}
+
+void funcao_append(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+
+    if(numero_argumentos < 3){
+        printf("Erro: Argumentos insuficientes\n");
+        return;
+    }
+
+    int indice = -1;
+    for(int i = 0; i < quantidade_tarefas; i++){
+        if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
+            indice = i;
+            break;
+        }
+    }
+
+    if(indice == -1){
+        printf("Erro: essa tarefa nao existe.\n");
+        return;
+    }
+
+    strncpy(cadastros[indice].arquivo_output, argumentos[2], 99);
+    cadastros[indice].arquivo_output[99] = '\0';
+    cadastros[indice].modo_output = 2;
+}
+
+void mudar_diretorio(char *argumentos[], int numero_argumentos){
+
+    if(numero_argumentos < 2){
+        printf("Erro: poucos argumentos\n");
+        return;
+    }
+
+    if(chdir(argumentos[1]) != 0){
+        printf("Erro: diretorio nao existe.\n");
     }
 }
 
@@ -171,7 +252,7 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
                 sequential(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
             } else if (strcmp(argumentos[1], "parallel") == 0){
-                run_parallel();
+                parallel(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
             } else if(strcmp(argumentos[1], "pipe") == 0){
                 run_pipe();
@@ -180,11 +261,19 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
                 run_task(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
             }
+    
+    } else if(strcmp(argumentos[0], "output") == 0){
+        funcao_output(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+
+    } else if(strcmp(argumentos[0], "append") == 0){
+        funcao_append(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
     } else if(strcmp(argumentos[0], "workdir") == 0){
-        
+        mudar_diretorio(argumentos, numero_argumentos); 
 
-    } else {
+    } else if(strcmp(argumentos[0], "input") == 0){
+        funcao_input(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+    }else{
         printf("Erro: comando desconhecido\n");
     }
 
@@ -242,7 +331,7 @@ int main(int argc, char *argv[]){
                     sequential(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
                 } else if (strcmp(argumentos[1], "parallel") == 0){
-                    //parallel();
+                    parallel(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
                 } else if(strcmp(argumentos[1], "pipe") == 0){
                     //pipe();
@@ -253,9 +342,18 @@ int main(int argc, char *argv[]){
                 }
 
             } else if(strcmp(argumentos[0], "workdir") == 0){
-            
+                mudar_diretorio(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
 
-            } else {
+            }else if(strcmp(argumentos[0], "input") == 0){
+                funcao_input(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+            } else if(strcmp(argumentos[0], "output") == 0){
+                funcao_output(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+            }else if(strcmp(argumentos[0], "append") == 0){
+                funcao_append(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+
+            }else{
                 printf("Erro: processo desconhecido\n");
             }   
         }
