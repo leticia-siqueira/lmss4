@@ -1,3 +1,0 @@
-task listar /bin/ls -l
-run listar
-exit
