@@ -3,8 +3,9 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fcntl.h>
 
-#define MAX_argumentos 20
+#define MAX_argumentos 50
 
 typedef struct Task{
     char nome[100];
@@ -71,7 +72,7 @@ void run_task(char *argumentos[], int numero_argumentos, Task cadastros[], int q
         return;
     }
 
-    char *argv_exec[22]; 
+    char *argv_exec[50]}; 
     argv_exec[0] = cadastros[indice].programa;
     int i;
     for(i = 0; i < cadastros[indice].quantidade_arg; i++){
@@ -85,6 +86,36 @@ void run_task(char *argumentos[], int numero_argumentos, Task cadastros[], int q
         printf("Erro: Falha na criacao do processo.\n");
         return;
     } else if(pid == 0){
+        if(cadastros[indice].arquivo_input[0] != '\0'){
+        
+        int fd_in = open(cadastros[indice].arquivo_input, O_RDONLY);
+        
+        if(fd_in < 0){
+            printf("Erro: nao daa pra abrir\n");
+            exit(1);
+        }
+        dup2(fd_in, 0);
+        close(fd_in);
+        }
+
+        if(cadastros[indice].modo_output == 1){
+            int fd_out = open(cadastros[indice].arquivo_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if(fd_out < 0){
+                printf("Erro: nao da pra abrir\n");
+                exit(1);
+            }
+            dup2(fd_out, 1);
+            close(fd_out);
+
+        } else if(cadastros[indice].modo_output == 2){
+            int fd_out = open(cadastros[indice].arquivo_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if(fd_out < 0){
+                printf("Erro: nao foi possivel abrir '%s'\n", cadastros[indice].arquivo_output);
+                exit(1);
+            }
+            dup2(fd_out, 1);
+            close(fd_out);
+        }
         execvp(cadastros[indice].programa, argv_exec);
 
         printf("Erro: nao pode ser executado.\n");
@@ -130,7 +161,7 @@ void parallel(char *argumentos[], int numero_argumentos, Task cadastros[], int q
             continue;
         }
 
-        char *argv_exec[22]; 
+        char *argv_exec[50]; 
         argv_exec[0] = cadastros[indice].programa;
         int j;
         for(j = 0; j < cadastros[indice].quantidade_arg; j++){
@@ -144,6 +175,36 @@ void parallel(char *argumentos[], int numero_argumentos, Task cadastros[], int q
             printf("Erro: Falha ao criar o processo.\n");
             return;
         } else if(pid == 0){
+            if(cadastros[indice].arquivo_input[0] != '\0'){
+        
+            int fd_in = open(cadastros[indice].arquivo_input, O_RDONLY);
+        
+            if(fd_in < 0){
+                printf("Erro: nao foi possivel abrir '%s'\n", cadastros[indice].arquivo_input);
+                exit(1);
+            }
+            dup2(fd_in, 0);
+            close(fd_in);
+            }
+
+            if(cadastros[indice].modo_output == 1){
+                int fd_out = open(cadastros[indice].arquivo_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if(fd_out < 0){
+                    printf("Erro: nao da pra abrir\n");
+                    exit(1);
+                }
+                dup2(fd_out, 1);
+                close(fd_out);
+
+            } else if(cadastros[indice].modo_output == 2){
+                int fd_out = open(cadastros[indice].arquivo_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+                if(fd_out < 0){
+                    printf("Erro: nao da pra abrir\n");
+                    exit(1);
+                }
+                dup2(fd_out, 1);
+                close(fd_out);
+            }
             execvp(cadastros[indice].programa, argv_exec);
 
             printf("Erro: nao pode ser executado.\n");
@@ -155,6 +216,96 @@ void parallel(char *argumentos[], int numero_argumentos, Task cadastros[], int q
     }
 
     for(int i = 0; i < total_processos_paralelos; i++){
+        int status;
+        waitpid(pid_processos[i], &status, 0);
+    }
+}
+
+void run_pipe(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+
+    if(numero_argumentos < 4){
+        printf("Erro: run pipe precisa de pelo menos 2 tarefas.\n");
+        return;
+    }
+
+    int total_tarefas = numero_argumentos - 2; 
+    int total_pipes = total_tarefas - 1;
+
+    int pipes[10][2]; 
+
+    for(int p = 0; p < total_pipes; p++){
+        if(pipe(pipes[p]) == -1){
+            printf("Erro: falha ao criar pipe.\n");
+            return;
+        }
+    }
+
+    pid_t pid_processos[50];
+    int total_processos = 0;
+
+    for(int i = 2; i < numero_argumentos; i++){
+
+        int tarefa_atual = i - 2; 
+
+        int indice = -1;
+        for(int k = 0; k < quantidade_tarefas; k++){
+            if(strcmp(cadastros[k].nome, argumentos[i]) == 0){
+                indice = k;
+                break;
+            }
+        }
+
+        if(indice == -1){
+            printf("Erro: essa tarefa nao existe.\n");
+            continue;
+        }
+
+        char *argv_exec[22];
+        argv_exec[0] = cadastros[indice].programa;
+        int j;
+        for(j = 0; j < cadastros[indice].quantidade_arg; j++){
+            argv_exec[j + 1] = cadastros[indice].argumento[j];
+        }
+        argv_exec[j + 1] = NULL;
+
+        pid_t pid = fork();
+
+        if(pid < 0){
+            printf("Erro: falha ao criar processo.\n");
+            return;
+
+        } else if(pid == 0){
+
+            if(tarefa_atual > 0){
+                dup2(pipes[tarefa_atual - 1][0], 0);
+            }
+
+            if(tarefa_atual < total_pipes){
+                dup2(pipes[tarefa_atual][1], 1);
+            }
+
+            for(int p = 0; p < total_pipes; p++){
+                close(pipes[p][0]);
+                close(pipes[p][1]);
+            }
+
+            execvp(cadastros[indice].programa, argv_exec);
+
+            printf("Erro: nao pode ser executado.\n");
+            exit(1);
+
+        } else {
+            pid_processos[total_processos] = pid;
+            total_processos++;
+        }
+    }
+
+    for(int p = 0; p < total_pipes; p++){
+        close(pipes[p][0]);
+        close(pipes[p][1]);
+    }
+
+    for(int i = 0; i < total_processos; i++){
         int status;
         waitpid(pid_processos[i], &status, 0);
     }
@@ -184,6 +335,31 @@ void funcao_input(char *argumentos[], int numero_argumentos, Task cadastros[], i
     cadastros[indice].arquivo_input[99] = '\0';
 }
 
+void funcao_output(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
+
+    if(numero_argumentos < 3){
+        printf("Erro: argumentos insuficientes\n");
+        return;
+    }
+
+    int indice = -1;
+    for(int i = 0; i < quantidade_tarefas; i++){
+        if(strcmp(cadastros[i].nome, argumentos[1]) == 0){
+            indice = i;
+            break;
+        }
+    }
+
+    if(indice == -1){
+        printf("Erro: essa tarefa nao existe.\n");
+        return;
+    }
+
+    strncpy(cadastros[indice].arquivo_output, argumentos[2], 99);
+    cadastros[indice].arquivo_output[99] = '\0';
+    cadastros[indice].modo_output = 1;
+}
+
 void funcao_append(char *argumentos[], int numero_argumentos, Task cadastros[], int quantidade_tarefas){
 
     if(numero_argumentos < 3){
@@ -209,7 +385,7 @@ void funcao_append(char *argumentos[], int numero_argumentos, Task cadastros[], 
     cadastros[indice].modo_output = 2;
 }
 
-void mudar_diretorio(char *argumentos[], int numero_argumentos){
+void funcao_workdir(char *argumentos[], int numero_argumentos){
 
     if(numero_argumentos < 2){
         printf("Erro: poucos argumentos\n");
@@ -255,7 +431,7 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
                 parallel(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
             } else if(strcmp(argumentos[1], "pipe") == 0){
-                run_pipe();
+                //run_pipe();
 
             } else{
                 run_task(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
@@ -269,7 +445,7 @@ int ler_linha(char *linha, Task cadastros[], int *quantidade_tarefas){
         funcao_append(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
 
     } else if(strcmp(argumentos[0], "workdir") == 0){
-        mudar_diretorio(argumentos, numero_argumentos); 
+        funcao_workdir(argumentos, numero_argumentos); 
 
     } else if(strcmp(argumentos[0], "input") == 0){
         funcao_input(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
@@ -342,7 +518,7 @@ int main(int argc, char *argv[]){
                 }
 
             } else if(strcmp(argumentos[0], "workdir") == 0){
-                mudar_diretorio(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+                funcao_workdir(argumentos, numero_argumentos);
 
             }else if(strcmp(argumentos[0], "input") == 0){
                 funcao_input(argumentos, numero_argumentos, cadastros, quantidade_tarefas);

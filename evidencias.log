@@ -392926,3 +392926,46 @@ make: *** [Makefile:2: processflow] Error 1
 [?2004lexit
 
 Script done on 2026-08-23 14:07:08-03:00 [COMMAND_EXIT_CODE="2"]
+Script started on 2026-08-23 22:23:54-03:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="159" LINES="15"]
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make clean
+[?2004lrm -f *.o *.txt processflow
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ date
+[?2004lSun Aug 23 22:24:18 -03 2026
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+[01m[Kmain.c:[m[K In function ‘[01m[Kler_linha[m[K’:
+[01m[Kmain.c:258:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Krun_pipe[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+  258 |                 [01;35m[Krun_pipe[m[K();
+      |                 [01;35m[K^~~~~~~~[m[K
+[01m[Kmain.c:266:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kfuncao_output[m[K’; did you mean ‘[01m[Kfuncao_input[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+  266 |         [01;35m[Kfuncao_output[m[K(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+      |         [01;35m[K^~~~~~~~~~~~~[m[K
+      |         [32m[Kfuncao_input[m[K
+[01m[Kmain.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kmain.c:345:17:[m[K [01;31m[Kerror: [m[Ktoo many arguments to function ‘[01m[Kmudar_diretorio[m[K’
+  345 |                 [01;31m[Kmudar_diretorio[m[K(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+      |                 [01;31m[K^~~~~~~~~~~~~~~[m[K
+[01m[Kmain.c:212:6:[m[K [01;36m[Knote: [m[Kdeclared here
+  212 | void [01;36m[Kmudar_diretorio[m[K(char *argumentos[], int numero_argumentos){
+      |      [01;36m[K^~~~~~~~~~~~~~~[m[K
+make: *** [Makefile:5: main.o] Error 1
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ ^C[?2004l[?2004h[?2004l
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ make
+[?2004lgcc -c main.c
+[01m[Kmain.c:[m[K In function ‘[01m[Kler_linha[m[K’:
+[01m[Kmain.c:266:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kfuncao_output[m[K’; did you mean ‘[01m[Kfuncao_input[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+  266 |         [01;35m[Kfuncao_output[m[K(argumentos, numero_argumentos, cadastros, *quantidade_tarefas);
+      |         [01;35m[K^~~~~~~~~~~~~[m[K
+      |         [32m[Kfuncao_input[m[K
+[01m[Kmain.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kmain.c:345:17:[m[K [01;31m[Kerror: [m[Ktoo many arguments to function ‘[01m[Kmudar_diretorio[m[K’
+  345 |                 [01;31m[Kmudar_diretorio[m[K(argumentos, numero_argumentos, cadastros, quantidade_tarefas);
+      |                 [01;31m[K^~~~~~~~~~~~~~~[m[K
+[01m[Kmain.c:212:6:[m[K [01;36m[Knote: [m[Kdeclared here
+  212 | void [01;36m[Kmudar_diretorio[m[K(char *argumentos[], int numero_argumentos){
+      |      [01;36m[K^~~~~~~~~~~~~~~[m[K
+make: *** [Makefile:5: main.o] Error 1
+[?2004h]0;letciasiqueira@Letcia: ~/lmss4[01;32mletciasiqueira@Letcia[00m:[01;34m~/lmss4[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-23 22:27:05-03:00 [COMMAND_EXIT_CODE="2"]
